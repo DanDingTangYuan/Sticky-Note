@@ -62,6 +62,7 @@ class StickyNote(tk.Toplevel, ResizableMixin):
         menu.add_command(label="新增便利貼", command = self.manager.create_note)
         menu.add_command(label="刪除當前的便利貼", command = self.on_close)
         menu.add_command(label="刪除全部便利貼", command = self.reset_notes)
+        menu.add_command(label="手動儲存", command=self.manager.save_all_notes)
         menu.add_command(label="儲存並關閉",command=lambda: self.manager.close_all(quit_app=True))
         menu.post(event.x_root, event.y_root)
 

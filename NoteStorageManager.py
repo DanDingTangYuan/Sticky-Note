@@ -13,8 +13,16 @@ class NoteStorageManager:
     @classmethod
     def save(cls, notes):
         data = [note.get_data() for note in notes]
-        with open(cls.FILE, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+
+        try:
+            with open(cls.FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+                f.flush()  # ← 強制寫入到磁碟（防止打包時寫入不完整）
+                os.fsync(f.fileno())  # ← 更強制確保寫入
+            print(f"[儲存成功] {cls.FILE}")
+        except Exception as e:
+            print(f"[儲存失敗] {cls.FILE}：{e}")
+            
 
     @classmethod
     def load(cls):
@@ -22,3 +30,4 @@ class NoteStorageManager:
             return []
         with open(cls.FILE, "r", encoding="utf-8") as f:
             return json.load(f)
+
